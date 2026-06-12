@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>EcoLogic — Simulador de Transição Energética</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<main class="app">
+		<header class="header">
+			<div class="logo">
+				<svg viewBox="0 0 24 24"><path d="M12 3L2 9l10 6 10-6-10-6zM2 15l10 6 10-6M2 12l10 6 10-6"/></svg>
+			</div>
+			<div class="title-block">,
+				<h1><span class="eco">Eco</span><span class="logic">Logic</span><span class="dot">.</span></h1>
+				<p>Transição Energética</p>
+			</div>
+			<div class="header-status">
+				<span class="badge badge-green">● Sistema Ativo</span>
+			</div>
+		</header>
+
+		<nav class="tabs">
+			<button class="tab active" onclick="switchTab(0)">Consumo</button>
+			<button class="tab" onclick="switchTab(1)">Simulação</button>
+			<button class="tab" onclick="switchTab(2)">Dicas</button>
+		</nav>
+
+		<section class="section active" id="tab0">
+			<article class="card mb-1">
+				<h2 class="section-title">Adicionar consumo mensal</h2>
+				<div class="input-row">
+					<div>
+						<label>Mês/Ano</label>
+						<input type="text" id="inMes" placeholder="Jan/2025">
+					</div>
+					<div>
+						<label>Consumo (kWh)</label>
+						<input type="number" id="inKwh" placeholder="350" min="0">
+					</div>
+					<div>
+						<label>Valor (R$)</label>
+						<input type="number" id="inVal" placeholder="280" min="0">
+					</div>
+				</div>
+				<button class="add-btn" onclick="adicionarConsumo()">+ Inserir na lista</button>
+			</article>
+
+			<article class="card">
+				<div class="card-head">
+					<h2 class="section-title">Histórico de consumo</h2>
+					<button class="sec-btn" onclick="limparLista()">Limpar tudo</button>
+				</div>
+				<ul class="node-list" id="lista-nodes">
+					<li class="empty-state">Nenhum dado inserido ainda</li>
+				</ul>
+				<div class="chart-wrap">
+					<canvas id="consumoChart"></canvas>
+				</div>
+			</article>
+		</section>
+
+		<section class="section" id="tab1">
+			<article class="card mb-1">
+				<h2 class="section-title">Parâmetros da região</h2>
+				<div class="grid2">
+					<div>
+						<label>Horas de sol/dia (HSP)</label>
+						<select id="hsp">
+							<option value="5.5">Norte/Nordeste — 5.5h</option>
+							<option value="5.0" selected>Centro-Oeste — 5.0h</option>
+							<option value="4.5">Sul/Sudeste — 4.5h</option>
+						</select>
+					</div>
+					<div>
+						<label>Custo painel solar (R$)</label>
+						<input type="number" id="custoPainel" value="1200">
+					</div>
+					<div>
+						<label>Potência painel (kWp)</label>
+						<input type="number" id="potPainel" value="0.55" step="0.05">
+					</div>
+					<div>
+						<label>Tarifa kWh (R$)</label>
+						<input type="number" id="tarifa" value="0.82" step="0.01">
+					</div>
+				</div>
+				<button class="simulate-btn" onclick="executarSimulacao()">Executar Simulação</button>
+			</article>
+
+			<div id="resultArea"></div>
+
+			<article class="card mt-1">
+				<div class="card-head">
+					<h2 class="section-title">Simulações anteriores</h2>
+					<button class="pop-btn" id="popBtn" onclick="desempilharSimulacao()" disabled>Desfazer última</button>
+				</div>
+				<div class="node-list" id="pilha-nodes">
+					<div class="empty-state">Nenhuma simulação executada</div>
+				</div>
+			</article>
+		</section>
+
+		<section class="section" id="tab2">
+			<article class="card">
+				<h2 class="section-title">Dicas de energia limpa</h2>
+
+				<div class="tip-box">
+					<p class="tip-label">Dica do momento</p>
+					<p class="tip-text" id="tipText">Carregando...</p>
+					<div class="tip-nav">
+						<span id="tipCounter">1/8</span>
+						<div class="tip-actions">
+							<button onclick="dequeue()">Próxima →</button>
+						</div>
+					</div>
+				</div>
+
+				<aside class="tip-note">
+					As dicas circulam em sequência: a que você acabou de ver volta para o fim, e a próxima entra no lugar. Continue navegando para percorrer todas.
+				</aside>
+			</article>
+		</section>
+	</main>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
